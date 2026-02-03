@@ -1,0 +1,22 @@
+# --- S32DS Build Outputs ---
+Debug/
+Release/
+*.elf
+*.srec
+*.map
+*.o
+*.obj
+*.d
+
+# --- IDE Specific (User Preferences) ---
+.settings/
+.launches/
+*.launch
+
+# --- Operating System Files ---
+Thumbs.db
+.DS_Store
+
+# --- Optional: Documentation ---
+# If you generate Doxygen or other docs locally, ignore them
+/doc/
