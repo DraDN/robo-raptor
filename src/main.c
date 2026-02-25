@@ -34,6 +34,7 @@ extern "C" {
 
 #include "string.h"
 #include "stdio.h"
+#include "math.h"
 /*==================================================================================================
  *                          LOCAL TYPEDEFS (STRUCTURES, UNIONS, ENUMS)
 ==================================================================================================*/
@@ -91,14 +92,14 @@ int main(void)
     /*Initialize Servo driver*/
     /*First parameter: The Pwm Channel that was configured in Peripherals tool for the Servo*/
     /*Next parameters: Amount of Pwm ticks needed to achieve maximum desired left turn, right turn and middle position for your servo.*/
-//    ServoInit(1U, 3300U, 1700U, 2500U);
-    /*ServoTest();*/
+    ServoInit(1U, 3300U, 1700U, 2500U);
+//    ServoTest();
 
     /*Initialize Hbridge driver*/
     /*First two parameters: The Pwm Channels that were configured in Peripherals tool for the motors' speeds*/
     /*Next parameters: The Pcr of the pins used for the motors' directions*/
-//    HbridgeInit(2U, 3U, 32U, 33U, 6U, 64U);
-    /*HbridgeTest();*/
+    HbridgeInit(2U, 3U, 32U, 33U, 6U, 64U);
+//    HbridgeTest();
 
     /*Initialize display driver*/
     /*The display driver is for a 0.96", 128x32 OLED monochrome using a SSD1306 chip, like the one in the MR-CANHUBK344 kit*/
@@ -141,35 +142,38 @@ int main(void)
 //
     while(1){
     	DisplayClear();
-        double m0 = 0, m1 = 0;
+        double m0 = 0, m1 = 0, l = 0;
         Pixy2GetVectors(&PixyVectors);
-        if(PixyVectors.NumberOfVectors>=2){
+//        if(PixyVectors.NumberOfVectors>=2){
+//            double x0 = PixyVectors.Vectors[0].x0;
+//            double x1 = PixyVectors.Vectors[0].x1;
+//
+//            double y0 = PixyVectors.Vectors[0].y0;
+//            double y1 = PixyVectors.Vectors[0].y1;
+//
+//            double x0_1 = PixyVectors.Vectors[1].x0;
+//            double x1_1 = PixyVectors.Vectors[1].x1;
+//
+//            double y0_1 = PixyVectors.Vectors[1].y0;
+//            double y1_1 = PixyVectors.Vectors[1].y1;
+//
+//            m0 = (y0-y1 == 0) ? 0 : (x0 - x1) / (y0-y1);
+//            m1 = (y0_1-y1_1 == 0) ? 0 : (x0_1 - x1_1) / (y0_1 - y1_1);
+//
+//        }
+       if(PixyVectors.NumberOfVectors >= 1){
             double x0 = PixyVectors.Vectors[0].x0;
             double x1 = PixyVectors.Vectors[0].x1;
 
             double y0 = PixyVectors.Vectors[0].y0;
             double y1 = PixyVectors.Vectors[0].y1;
 
-            double x0_1 = PixyVectors.Vectors[1].x0;
-            double x1_1 = PixyVectors.Vectors[1].x1;
+            l = y0-y1;
 
-            double y0_1 = PixyVectors.Vectors[1].y0;
-            double y1_1 = PixyVectors.Vectors[1].y1;
-
-            m0 = (y0-y1 == 0) ? 0 : (x0 - x1) / (y0-y1);
-            m1 = (y0_1-y1_1 == 0) ? 0 : (x0_1 - x1_1) / (y0_1 - y1_1);
-
+//            m0 = (y0-y1 == 0) ? 0 : (x0 - x1) / (y0-y1);
+            m0 = (l == 0) ? 0 : (x0 - x1) / (l);
         }
-        else if(PixyVectors.NumberOfVectors == 1){
-            double x0 = PixyVectors.Vectors[0].x0;
-            double x1 = PixyVectors.Vectors[0].x1;
-
-            double y0 = PixyVectors.Vectors[0].y0;
-            double y1 = PixyVectors.Vectors[0].y1;
-
-            m0 = (y0-y1 == 0) ? 0 : (x0 - x1) / (y0-y1);
-        }
-        CarSteer = (m0  + m1) * 65;
+        CarSteer = -(m0  + m1) * 65;
         char car_steer_string[16];
         sprintf(car_steer_string, "%d", CarSteer);
 
@@ -184,8 +188,12 @@ int main(void)
         DisplayText(2U, direction_string, strlen(direction_string), 0U);
         DisplayText(3U, car_steer_string, strlen(car_steer_string), 0U);
         DisplayRefresh();
-//        HbridgeSetSpeed(100);
-//        Steer(CarSteer);
+
+//        l = (fabs(3*l) > 100) ? 100 : fabs(l);
+//		HbridgeSetSpeed(65);
+        int sped = 100 / fabs(1.3*CarSteer) * 80;
+        HbridgeSetSpeed(sped);
+        Steer(1.3*CarSteer);
     }
 }
 
