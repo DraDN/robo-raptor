@@ -26,23 +26,23 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 SECONDARY_SIZE += \
-Nxp_Cup_Pixy2_S32K144.siz \
+Nxp_Cup_RoboRaptor_S32K144.siz \
 
 
 # All Target
-all: Nxp_Cup_Pixy2_S32K144.elf secondary-outputs
+all: Nxp_Cup_RoboRaptor_S32K144.elf secondary-outputs
 
 # Tool invocations
-Nxp_Cup_Pixy2_S32K144.elf: $(OBJS) C:/Users/dradr/workspaceS32DS.3.6.6/Nxp_Cup_Pixy2_S32K144/Project_Settings/Linker_Files/linker_flash_s32k144.ld $(USER_OBJS)
+Nxp_Cup_RoboRaptor_S32K144.elf: $(OBJS) E:/workspaceS32DS.3.6.6/Nxp_Cup_RoboRaptor_S32K144/Project_Settings/Linker_Files/linker_flash_s32k144.ld $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Standard S32DS C Linker'
-	arm-none-eabi-gcc -o "Nxp_Cup_Pixy2_S32K144.elf" "@Nxp_Cup_Pixy2_S32K144.args"  $(USER_OBJS)
+	arm-none-eabi-gcc -o "Nxp_Cup_RoboRaptor_S32K144.elf" "@Nxp_Cup_RoboRaptor_S32K144.args"  $(USER_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-Nxp_Cup_Pixy2_S32K144.siz: Nxp_Cup_Pixy2_S32K144.elf
+Nxp_Cup_RoboRaptor_S32K144.siz: Nxp_Cup_RoboRaptor_S32K144.elf
 	@echo 'Invoking: Standard S32DS Print Size'
-	arm-none-eabi-size --format=berkeley Nxp_Cup_Pixy2_S32K144.elf
+	arm-none-eabi-size --format=berkeley Nxp_Cup_RoboRaptor_S32K144.elf
 	@echo 'Finished building: $@'
 	@echo ' '
 
