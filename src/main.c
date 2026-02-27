@@ -83,7 +83,7 @@ int main(void)
 
     /*Initialize RTD drivers with the compiled configurations*/
     DriversInit();
-
+// TEST
     /*Initialize Esc driver*/
     /*First parameter: The Pwm Channel that was configured in Peripherals tool for the Esc*/
     /*Next parameters: Amount of Pwm ticks needed to achieve 1ms, 1.5ms and 2ms long signals, standard for controlling an esc.*/
